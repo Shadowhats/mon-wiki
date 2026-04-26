@@ -63,7 +63,7 @@ Ce document traduit l'intégralité de mon référentiel Cisco CCNA vers l'envir
 
 ## 🔀 4. Switching (VLAN, Trunk, LACP, MAC)
 
-!!! warning "Attention à la syntaxe et aux protocoles"
+⚠️ "Attention à la syntaxe et aux protocoles"
     * **VTP** est propriétaire Cisco. Sur HP, on utilise le standard **MVRP** (`mvrp global enable`).
     * **Séparateur :** Contrairement à Cisco qui utilise des virgules pour lister des VLANs, Comware utilise des **espaces** (ex: `10 20 30`).
 
@@ -96,7 +96,7 @@ Ce document traduit l'intégralité de mon référentiel Cisco CCNA vers l'envir
 
 ## 🗺️ 6. Routage (Niveaux 3, OSPF, NAT)
 
-!!! warning "Note sur EIGRP"
+⚠️ "Note sur EIGRP"
     Le protocole EIGRP (`router eigrp`) est 100% propriétaire Cisco. Dans un environnement mixte ou HP, on le remplace obligatoirement par **OSPF**.
 
 | Action (Cisco) | Commande Cisco IOS | Équivalent HPE Comware |
