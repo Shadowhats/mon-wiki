@@ -1,0 +1,40 @@
+site_name: Mon Memo IT
+site_description: Documentation technique, Cheat Sheets et Labs
+site_author: Shad
+
+theme:
+  name: material
+  palette:
+    # Mode sombre activé par défaut
+    scheme: slate 
+    primary: custom
+    accent: cyan
+
+nav:
+  - 🏠 Accueil: index.md
+  
+  - 📚 Culture Générale IT:
+      - Panorama des Solutions (Stack IT): culture/outils_it.md
+      - NIS2 & Hygiène ANSSI: culture/nis2_anssi.md
+
+  - 🌐 Réseau:
+      - 🎓 Masterclass Fondamentaux (CCNA): reseau/notions_reseau.md
+      - ⚡ Commandes Cisco vs HPE: reseau/cisco_hpe.md
+      - 🛡️ Stormshield Network Security: reseau/stormshield.md
+      - 🧰 Troubleshooting Réseau: reseau/troubleshooting.md
+
+  - 🛡️ Cybersécurité:
+      - 🕵️‍♂️ Audit & Sécurité Offensive: culture/audit_securite.md
+
+  - 🐧 Système:
+      - 🪟 Active Directory & Windows Server: sys/ad_windows.md
+      - 🛠️ Dépannage AD & GPO: sys/troubleshooting_ad.md
+      - 🐧 Cheat Sheet Linux (CLI): sys/linux.md
+      - 🐳 Virtualisation & Docker: sys/virtualisation.md
+      - 📜 Scripts & Automatisation: sys/scripts.md
+
+  - 🤝 Soft Skills & Organisation:
+      - 📋 Procédures & Modèles: sys/soft_skills.md
+
+extra_css:
+  - stylesheets/custom.css

@@ -1,0 +1,9 @@
+/* Casse la limite de largeur du thème par défaut */
+.md-grid {
+  max-width: 95vw; /* Utilise 95% de la largeur de l'écran */
+}
+
+/* (Optionnel) Donne un peu plus d'espace au menu de gauche */
+.md-sidebar--primary {
+  width: 15rem; 
+}
