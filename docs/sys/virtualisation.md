@@ -19,7 +19,8 @@ Une VM simule un matériel complet (BIOS, CPU, RAM, Disque). C'est l'idéal pour
     * **VirtualBox / VMware Workstation :** Parfait pour tester des OS rapidement sur son PC de bureau.
 
 ### 💡 Concepts clés à connaître
-* **Snapshot (Instantané) :** Une "photo" de la VM à un instant T. Permet de revenir en arrière en 2 secondes si une mise à jour casse tout. (⚠️ *Ce n'est pas une sauvegarde pérenne !*).
+* **Snapshot (Instantané) :** Une "photo" de la VM à un instant T. Permet de revenir en arrière en 2 secondes si une mise à jour casse tout. 
+(⚠️ *Ce n'est pas une sauvegarde pérenne !*).
 * **Thin Provisioning (Allocation dynamique) :** Le disque de la VM ne prend que la place réelle des fichiers sur le stockage physique, pas la taille totale allouée (ex: Un disque de 100Go avec 10Go de données ne pèsera que 10Go sur le serveur).
 * **Pass-through :** Donner l'accès direct et exclusif d'un composant physique (carte graphique GPU, contrôleur USB) à une VM.
 
