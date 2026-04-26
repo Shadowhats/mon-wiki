@@ -50,6 +50,9 @@ Bonnes pratiques :
 ---
 
 ## 🧰 0.2 Prérequis PowerShell pour Active Directory
+### Autoriser l'exécution des scripts (Execution Policy)
+# Par défaut, Windows bloque les scripts. À exécuter une fois en mode Administrateur :
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
 
 Sur un poste d’administration, il faut installer les outils RSAT.
 
@@ -332,7 +335,8 @@ Alex,Bernard,abernard,P@ssw0rd123!,"OU=IT,OU=Utilisateurs,DC=studi,DC=srv",IT,Te
 ---
 
 ## 👥 2.2 Création massive d’utilisateurs depuis CSV
-
+⚠️ "Sécurité des mots de passe"
+    Ce script lit les mots de passe en clair depuis un CSV. **Supprimez impérativement le fichier CSV** de votre serveur une fois le script terminé pour éviter une faille critique.
 ```powershell
 Import-Module ActiveDirectory
 
@@ -1445,20 +1449,19 @@ Select-Object MachineName, Status, DisplayName
 
 ---
 
-## 🔄 7.3 Redémarrer un service à distance
+## 🔄 7.3 Redémarrer un service à distance (Méthode Moderne WinRM)
+
+"WinRM vs RPC"
+    Aujourd'hui, de nombreuses commandes classiques comme `Get-Service -ComputerName` échouent car elles utilisent le vieux protocole RPC (bloqué par les pare-feux).
+    La bonne pratique est d'utiliser `Invoke-Command` qui s'appuie sur **WinRM (Port HTTP 5985)**.
 
 ```powershell
 $Servers = @("SRV-FILE01", "SRV-WEB01")
 $ServiceName = "Spooler"
 
-foreach ($Server in $Servers) {
-    try {
-        Restart-Service -InputObject (Get-Service -ComputerName $Server -Name $ServiceName) -Force
-        Write-Host "Service redémarré sur $Server" -ForegroundColor Green
-    }
-    catch {
-        Write-Host "Erreur sur $Server : $($_.Exception.Message)" -ForegroundColor Red
-    }
+Invoke-Command -ComputerName $Servers -ScriptBlock {
+    Restart-Service -Name $using:ServiceName -Force
+    Write-Output "Service $using:ServiceName redémarré sur $env:COMPUTERNAME"
 }
 ```
 
