@@ -29,13 +29,13 @@ Ce mémo est le référentiel complet d'administration système : de l'installat
 | **Installer Rôle AD DS** | `Install-WindowsFeature` | `Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools` |
 | **Créer Forêt** | `Install-ADDSForest` | `Install-ADDSForest -DomainName "studi.srv" -DomainNetbiosName "STUDI" -InstallDns -Force` |
 | **Ajout Contrôleur (DC)** | `Install-ADDSDomainController` | `Install-ADDSDomainController -DomainName "studi.srv" -Credential (Get-Credential) -InstallDns -GlobalCatalog` |
-| **Rôles FSMO (Transfert)**| `Move-ADDirectoryServerOperationMasterRole` | Transfert des rôles : `... -OperationMasterRole SchemaMaster, DomainNamingMaster, PDCEmulator, RIDMaster, InfrastructureMaster -Force` |
+| **Rôles FSMO (Transfert)**| `Move-ADDirectoryServerOperationMasterRole` | Transfert des 5 rôles FSMO vers le nouveau DC : `... -OperationMasterRole SchemaMaster, DomainNamingMaster, PDCEmulator, RIDMaster, InfrastructureMaster -Force` |
 | **Activer Corbeille AD** | `Enable-ADOptionalFeature` | `Enable-ADOptionalFeature -Identity 'Recycle Bin Feature' -Scope ForestOrConfigurationSet -Target "studi.srv"` |
 | **Restaurer depuis Corbeille**| `Restore-ADObject` | `Get-ADObject -Filter 'Name -like "*Paul Tech*"' -IncludeDeletedObjects | Restore-ADObject` |
 | **Niveau Fonctionnel** | `Set-ADDomainMode` | `Set-ADDomainMode -Identity "studi.srv" -DomainMode Windows2016Domain` |
-| **Sites Physiques** | `New-ADReplicationSite` | `New-ADReplicationSite -Name "Site_Paris" -Description 'Siège Social'` |
-| **Sous-réseaux AD** | `New-ADReplicationSubnet` | `New-ADReplicationSubnet -Name "192.168.10.0/24" -Site "Site_Paris"` |
-| **Approbation Domaines** | `Add-ADComputerServiceAccount`| Crée une relation de confiance (Trust). |
+| **Sites Physiques** | `New-ADReplicationSite` | Déclare un site pour optimiser les flux de réplication : `New-ADReplicationSite -Name "Site_Paris" -Description 'Siège Social'` |
+| **Sous-réseaux AD** | `New-ADReplicationSubnet` | Associe un réseau au site : `New-ADReplicationSubnet -Name "192.168.10.0/24" -Site "Site_Paris"` |
+| **Approbation Domaines** | `Add-ADComputerServiceAccount`| Crée une relation de confiance (Trust) entre deux forêts ou domaines distincts. |
 
 ---
 
@@ -45,15 +45,15 @@ Ce mémo est le référentiel complet d'administration système : de l'installat
 | :--- | :--- | :--- |
 | **Création OU** | `New-ADOrganizationalUnit` | `New-ADOrganizationalUnit -Name "Informatique" -Path "DC=studi,DC=srv"` |
 | **Création Base User** | `New-ADUser` | `New-ADUser -Name "Paul Tech" -SamAccountName p.tech ... -AccountPassword (ConvertTo-SecureString "Mdp!" -AsPlainText -Force) -Enabled $true` |
-| **Mots de passe fins (FGPP)**| `New-ADFineGrainedPasswordPolicy` | Oblige une longueur ou complexité spécifique à un groupe. |
+| **Mots de passe fins (FGPP)**| `New-ADFineGrainedPasswordPolicy` | Oblige une longueur ou complexité spécifique (ex: 15 caractères) à un groupe (ex: Administrateurs). |
 | **Infos Contact User** | `Set-ADUser` | `Set-ADUser -Identity p.tech -OfficePhone "0123456789" -EmailAddress "p.tech@studi.srv"` |
 | **Adresse & Organisation**| `Set-ADUser` | Modifier le Titre/Département : `Set-ADUser -Identity p.tech -Title "Admin Sys" -Department "Support IT"` |
-| **Profil Itinérant** | `Set-ADUser -ProfilePath` | `Set-ADUser -Identity "p.tech" -ProfilePath "\\SRV-SAMBA\Profils$\p.tech" -HomeDirectory "\\SRV-SAMBA\Homes$\p.tech" -HomeDrive "U:"` |
+| **Profil Itinérant** | `Set-ADUser -ProfilePath` | Centralise les documents du PC sur le réseau : `Set-ADUser -Identity "p.tech" -ProfilePath "\\SRV-SAMBA\Profils$\p.tech" -HomeDirectory "\\SRV-SAMBA\Homes$\p.tech" -HomeDrive "U:"` |
 | **Restrictions PC** | `Set-ADUser -LogonWorkstations`| Restreint les PC de connexion : `Set-ADUser -Identity "p.tech" -LogonWorkstations "PC-TECH01, PC-TECH02"` |
-| **Heures de Connexion** | `Set-ADUser -LogonHours` | Interdire le travail de nuit via un tableau de bytes. |
-| **Expiration Compte** | `Set-ADAccountExpiration` | `Set-ADAccountExpiration -Identity "p.tech" -DateTime "12/31/2026 23:59:00"` |
-| **Réinitialiser Mdp** | `Set-ADAccountPassword` | `Set-ADAccountPassword -Identity "p.tech" -NewPassword (...) -Reset` |
-| **Débloquer Compte** | `Unlock-ADAccount` | `Unlock-ADAccount -Identity "p.tech"` |
+| **Heures de Connexion** | `Set-ADUser -LogonHours` | Interdire le travail de nuit (s'applique via un tableau binaire). |
+| **Expiration Compte** | `Set-ADAccountExpiration` | Idéal pour un stagiaire ou CDD : `Set-ADAccountExpiration -Identity "p.tech" -DateTime "12/31/2026 23:59:00"` |
+| **Réinitialiser Mdp** | `Set-ADAccountPassword` | `Set-ADAccountPassword -Identity "p.tech" -NewPassword (...) -Reset -ChangePasswordAtLogon $true` |
+| **Débloquer Compte** | `Unlock-ADAccount` | Déverrouille suite à de trop nombreuses tentatives : `Unlock-ADAccount -Identity "p.tech"` |
 | **Création Groupe** | `New-ADGroup` | `New-ADGroup -Name "GRP_IT" -GroupCategory Security -GroupScope Global` |
 | **Ajouter au Groupe** | `Add-ADGroupMember` | `Add-ADGroupMember -Identity "GRP_IT" -Members "p.tech"` |
 
@@ -64,26 +64,26 @@ Ce mémo est le référentiel complet d'administration système : de l'installat
 ### 📘 DNS
 | Action | Commande & Paramètres | Exemple Réel / Explication |
 | :--- | :--- | :--- |
-| **Zone Directe** | `Add-DnsServerPrimaryZone` | `Add-DnsServerPrimaryZone -Name "studi.srv" -ReplicationScope Domain` |
-| **Zone Inverse** | `Add-DnsServerPrimaryZone` | `Add-DnsServerPrimaryZone -NetworkId 192.168.10.0/24 -ReplicationScope Domain` |
+| **Zone Directe** | `Add-DnsServerPrimaryZone` | IP vers Nom : `Add-DnsServerPrimaryZone -Name "studi.srv" -ReplicationScope Domain` |
+| **Zone Inverse** | `Add-DnsServerPrimaryZone` | Nom vers IP : `Add-DnsServerPrimaryZone -NetworkId 192.168.10.0/24 -ReplicationScope Domain` |
 | **Hôte (A / AAAA)** | `Add-DnsServerResourceRecordA` | `Add-DnsServerResourceRecordA -ZoneName "studi.srv" -Name "SRV-SAMBA" -IPv4Address 192.168.10.20 -CreatePtr` |
 | **Alias (CNAME)** | `Add-DnsServerResourceRecordCName`| `Add-DnsServerResourceRecordCName -ZoneName "studi.srv" -Name "www" -HostNameAlias "srv-web01.studi.srv"` |
 | **Mail (MX)** | `Add-DnsServerResourceRecordMX`| Définit le serveur mail : `... -MailExchange "mail.studi.srv" -Preference 10` |
-| **Texte (TXT/SPF)** | `Add-DnsServerResourceRecord` | Ajoute un champ TXT (ex: anti-spam SPF). |
-| **Redirecteurs Globaux** | `Add-DnsServerForwarder` | `Add-DnsServerForwarder -IPAddress 8.8.8.8, 1.1.1.1 -PassThru` |
-| **Redirecteur Conditionnel**| `Add-DnsServerConditionalForwarderZone` | Pointe vers le DNS d'une filiale pour une zone précise. |
-| **Nettoyage (Scavenging)**| `Set-DnsServerScavenging` | Supprime les IP fantômes automatiquement. |
+| **Texte (TXT/SPF)** | `Add-DnsServerResourceRecord` | Ajoute un champ TXT (souvent utilisé pour l'anti-spam SPF/DKIM). |
+| **Redirecteurs Globaux** | `Add-DnsServerForwarder` | Envoie les requêtes Inconnues vers Internet : `Add-DnsServerForwarder -IPAddress 8.8.8.8, 1.1.1.1 -PassThru` |
+| **Redirecteur Conditionnel**| `Add-DnsServerConditionalForwarderZone` | Pointe vers le DNS d'une filiale pour une zone précise (`filiale.com`). |
+| **Nettoyage (Scavenging)**| `Set-DnsServerScavenging` | Supprime les IP fantômes et anciens PC automatiquement. |
 
 ### 🛟 DHCP
 | Action | Commande & Paramètres | Exemple Réel / Explication |
 | :--- | :--- | :--- |
-| **Autoriser DHCP** | `Add-DhcpServerInDC` | Autorise le serveur dans l'AD. |
+| **Autoriser DHCP** | `Add-DhcpServerInDC` | Sécurité : Autorise le serveur à distribuer des IP dans l'AD. |
 | **Nouvelle Étendue** | `Add-DhcpServerv4Scope` | `Add-DhcpServerv4Scope -Name "LAN" -StartRange 192.168.10.100 -EndRange 192.168.10.200 -SubnetMask 255.255.255.0 -State Active` |
-| **Options (003, 006, 015)** | `Set-DhcpServerv4OptionValue` | Option 3 (Routeur), 6 (DNS), 15 (Suffixe DNS). |
-| **Réservation MAC** | `Add-DhcpServerv4Reservation` | `Add-DhcpServerv4Reservation -ScopeId 192.168.10.0 -IPAddress 192.168.10.150 -ClientId "00-11-22-33-44-55"` |
-| **Filtre MAC** | `Add-DhcpServerv4Filter` | Liste blanche/noire d'adresses MAC. |
+| **Options (003, 006, 015)** | `Set-DhcpServerv4OptionValue` | Configure l'Option 3 (Routeur/Passerelle), 6 (Serveur DNS), 15 (Nom de Domaine). |
+| **Réservation MAC** | `Add-DhcpServerv4Reservation` | Donne toujours la même IP : `Add-DhcpServerv4Reservation -ScopeId 192.168.10.0 -IPAddress 192.168.10.150 -ClientId "00-11-22-33-44-55"` |
+| **Filtre MAC** | `Add-DhcpServerv4Filter` | Liste blanche ou noire d'adresses MAC pour bloquer des appareils. |
 | **Sauvegarde DHCP** | `Backup-DhcpServer` | `Backup-DhcpServer -Path "C:\Backup_DHCP"` |
-| **Failover (Haute Dispo)**| `Add-DhcpServerv4Failover` | Lie 2 serveurs DHCP pour éviter les pannes. |
+| **Failover (Haute Dispo)**| `Add-DhcpServerv4Failover` | Lie 2 serveurs DHCP. Peut fonctionner en **Load Balancing** (Actif/Actif) ou **Hot Standby** (Actif/Passif). |
 
 ---
 
@@ -92,9 +92,9 @@ Ce mémo est le référentiel complet d'administration système : de l'installat
 | Action | Commande & Paramètres | Exemple Réel / Explication |
 | :--- | :--- | :--- |
 | **Nouvelle GPO** | `New-GPO -Name` | `New-GPO -Name "SEC_NoUSB" -Comment "Bloque les clés USB"` |
-| **Liaison GPO** | `New-GPLink` | `New-GPLink -Name "SEC_NoUSB" -Target "OU=Informatique,DC=studi,DC=srv" -Enforced $true` |
+| **Liaison GPO** | `New-GPLink` | Applique la GPO à une cible : `New-GPLink -Name "SEC_NoUSB" -Target "OU=Informatique,DC=studi,DC=srv" -Enforced $true` |
 | **Bloquer l'héritage** | `Set-GPOInheritance` | `Set-GPOInheritance -Target "OU=Direction,DC=studi,DC=srv" -IsBlocked Yes` |
-| **Filtre WMI** | `New-GPOWmiFilter` | Cible Windows 10 : `... -Query "Select * from Win32_OperatingSystem where Version like '10.%'"` |
+| **Filtre WMI** | `New-GPOWmiFilter` | Cible Windows 10 uniquement : `... -Query "Select * from Win32_OperatingSystem where Version like '10.%'"` |
 | **Sauvegarde GPO** | `Backup-Gpo -All` | `Backup-Gpo -All -Path "C:\Backup_GPOs"` |
 
 ---
@@ -105,29 +105,28 @@ Ce mémo est le référentiel complet d'administration système : de l'installat
 | :--- | :--- | :--- |
 | **Initialiser Disque** | `Initialize-Disk` | `Initialize-Disk -Number 1 -PartitionStyle GPT` |
 | **Partition & Format** | `New-Partition` / `Format-Volume` | `New-Partition -DiskNumber 1 -UseMaximumSize -AssignDriveLetter | Format-Volume -FileSystem NTFS -NewFileSystemLabel "DATA"` |
-| **Partage SMB Sécurisé** | `New-SmbShare` | `New-SmbShare -Name "Direction" -Path "D:\Direction" -FullAccess "STUDI\Grp_Direction" -EncryptData $true -FolderEnumerationMode AccessBased` |
-| **Clichés (VSS)** | `vssadmin create shadow` | Sauvegarde instantanée d'un volume : `vssadmin create shadow /for=D:` |
-| **Quota FSRM** | `New-FsrmQuota` | `New-FsrmQuota -Path "D:\Direction" -Size 50GB -SoftLimit` |
+| **Partage SMB Sécurisé** | `New-SmbShare` | Crée un partage caché via ABE (Access-Based Enumeration) : `New-SmbShare -Name "Direction$" -Path "D:\Direction" -FullAccess "STUDI\Grp_Direction" -FolderEnumerationMode AccessBased` |
+| **Clichés (VSS)** | `vssadmin create shadow` | Sauvegarde instantanée ("Versions précédentes") d'un volume : `vssadmin create shadow /for=D:` |
+| **Quota FSRM** | `New-FsrmQuota` | Bloque un utilisateur à 50Go : `New-FsrmQuota -Path "D:\Direction" -Size 50GB -SoftLimit` |
 
 ---
 
-## 🏗️ 7. Rôles Serveurs Avancés (Hyper-V, IIS, DFS, Print, PKI, WSUS, WDS)
+## 🏗️ 7. Rôles Serveurs Avancés (Hyper-V, DFS, PKI, WSUS, WDS)
 
 | Rôle / Action | Commande & Paramètres | Exemple Réel / Explication |
 | :--- | :--- | :--- |
 | **Hyper-V (Switch)** | `New-VMSwitch` | `New-VMSwitch -Name "vSwitch_LAN" -SwitchType Private` |
 | **Hyper-V (VM / RAM)** | `New-VM` / `Set-VM` | `New-VM -Name "SRV-WEB01" -MemoryStartupBytes 4GB -Generation 2` |
 | **Hyper-V (Snapshot)** | `Checkpoint-VM` | `Checkpoint-VM -Name "SRV-WEB01" -SnapshotName "Avant Mise A Jour"` |
-| **IIS (Serveur Web)** | `Install-WindowsFeature` | `Install-WindowsFeature -Name Web-Server -IncludeManagementTools` |
-| **IIS (Nouveau Site Web)**| `New-WebSite` | `New-WebSite -Name "Intranet" -Port 80 -PhysicalPath "C:\inetpub\intranet"` |
-| **DFS (Serveur / Racine)**| `New-DfsnRoot` | Cache l'emplacement des vrais serveurs sous un nom de domaine. |
-| **Print (Serveur Imp.)** | `Add-PrinterPort` / `Add-Printer`| Ajoute le port IP puis l'imprimante réseau partagée. |
-| **AD CS (PKI / Certificats)**| `Install-AdcsCertificationAuthority`| Installe le rôle d'Autorité de Certification racine de l'entreprise. |
-| **WSUS (Mises à jour)** | `wsusutil.exe postinstall` | Configure le stockage WSUS : `wsusutil.exe postinstall CONTENT_DIR="D:\Updates"` |
-| **WSUS (Nettoyage)** | `Invoke-WsusServerCleanup` | Supprime les MAJ obsolètes. |
-| **WDS (Déploiement PC)** | `Initialize-Wds` | Formate des PC via PXE : `Initialize-Wds -RemoteInstallDirectory "D:\RemoteInstall"` |
-| **WDS (Image Boot)** | `Import-WdsBootImage` | Transforme une clé USB en image bootable réseau WinPE. |
-| **Sauvegarde (Backup)** | `Start-WBBackup` | Nécessite la création d'une politique (`New-WBPolicy`), d'un volume, et d'une cible. |
+| **DFS-N (Namespace)** | `New-DfsnRoot` | Arbre logique qui masque l'IP du serveur sous le nom de domaine (ex: `\\studi.srv\Partages`). |
+| **DFS-R (Replication)** | `New-DfsReplicationGroup` | Moteur de synchronisation de fichiers en temps réel entre deux serveurs/sites (ex: Paris et Lyon). |
+| **Print (Serveur Imp.)** | `Add-PrinterPort` / `Add-Printer`| Ajoute le port IP puis l'imprimante réseau partagée via GPO. |
+| **AD CS (PKI / Certifs)** | `Install-AdcsCertificationAuthority`| Installe le rôle d'Autorité de Certification racine de l'entreprise (pour générer du HTTPS interne, 802.1x, VPN). |
+| **WSUS (Mises à jour)** | `wsusutil.exe postinstall` | Télécharge les MAJ Windows en un seul point : `wsusutil.exe postinstall CONTENT_DIR="D:\Updates"` |
+| **WSUS (Nettoyage)** | `Invoke-WsusServerCleanup` | Supprime les MAJ obsolètes pour libérer de l'espace. |
+| **WDS (Déploiement PC)** | `Initialize-Wds` | Formate et déploie des masters Windows via le réseau (PXE). |
+| **WDS (Image Boot)** | `Import-WdsBootImage` | Transforme une clé USB en image bootable réseau WinPE (`boot.wim`). |
+| **Sauvegarde (Backup)** | `Start-WBBackup` | L'outil Windows Server Backup nécessite la création d'une politique (`New-WBPolicy`), d'un volume, et d'une cible. |
 
 ---
 
@@ -135,11 +134,11 @@ Ce mémo est le référentiel complet d'administration système : de l'installat
 
 | Action | Commande & Paramètres | Exemple Réel / Explication |
 | :--- | :--- | :--- |
-| **Activer BitLocker** | `Enable-BitLocker` | `Enable-BitLocker -MountPoint "D:" -EncryptionMethod XtsAes256 -UsedSpaceOnly -RecoveryPasswordProtector` |
-| **LAPS (Mdp Locaux)** | `Set-AdmPwdComputerSelfPermission`| Donne à l'AD le droit de changer les mdp administrateur locaux des PC. |
-| **WinRM (Activer)** | `Enable-PSRemoting -Force` | Ouvre les oreilles du serveur pour écouter les ordres à distance. |
+| **Activer BitLocker** | `Enable-BitLocker` | Chiffrement du disque dur (Indispensable pour les portables). |
+| **LAPS (Mdp Locaux)** | `Set-AdmPwdComputerSelfPermission`| Microsoft Local Administrator Password Solution. Génère un mot de passe Admin Local unique par PC et le stocke dans l'AD de manière sécurisée. |
+| **WinRM (Activer)** | `Enable-PSRemoting -Force` | Ouvre les oreilles du serveur pour écouter les ordres à distance (Port 5985 HTTP / 5986 HTTPS). |
 | **Connexion Distante** | `Enter-PSSession` | Prend le contrôle du shell d'un autre PC : `Enter-PSSession -ComputerName "SRV-AD01"` |
-| **Exécution Massive** | `Invoke-Command` | Lance un script sur plusieurs PC : `Invoke-Command -ComputerName "PC1", "PC2" -ScriptBlock {Restart-Service Spooler}` |
+| **Exécution Massive** | `Invoke-Command` | Lance un script sur plusieurs PC en parallèle : `Invoke-Command -ComputerName "PC1", "PC2" -ScriptBlock {Restart-Service Spooler}` |
 
 ---
 
@@ -147,20 +146,20 @@ Ce mémo est le référentiel complet d'administration système : de l'installat
 
 ### Commandes pour surveiller le Serveur (PowerShell & CMD)
 * **Charge CPU / RAM :** `Get-Counter -Counter "\Processor(_Total)\% Processor Time"`
-* **Santé AD (Check-up) :** `dcdiag /v /c /e /f:C:\dcdiag.txt`
-* **Synchro des DC :** `repadmin /showrepl`
+* **Santé AD (Check-up) :** `dcdiag /v /c /e /f:C:\dcdiag.txt` (Commande ultime d'audit de santé).
+* **Synchro des DC :** `repadmin /showrepl` (Vérifie si les données de l'AD sont bien dupliquées entre les DC).
 * **Voir les Sessions Fichiers :** `Get-SmbSession | Select-Object ClientComputerName, ClientUserName`
 * **Voir les Erreurs (Crash) :** `Get-WinEvent -FilterHashTable @{LogName='System'; Level=2} -MaxEvents 10`
 * **Espace Disque :** `Get-Volume | Select-Object DriveLetter, FileSystemLabel, SizeRemaining`
 * **Trouver Gros Fichiers :** `Get-ChildItem -Path C:\ -Recurse -File -ErrorAction SilentlyContinue | Sort-Object Length -Descending | Select-Object -First 10`
 * **Tuer un Programme :** `Stop-Process -Name notepad -Force`
-* **Test Port TCP (Ping avancé) :** `Test-NetConnection -ComputerName "google.com" -Port 443`
+* **Test Port TCP (Ping avancé) :** `Test-NetConnection -ComputerName "google.com" -Port 443` (Indispensable quand ICMP est bloqué).
 
 ### Commandes Côté Client (Poste de l'utilisateur)
-* **Vérifier son Contrôleur :** `nltest /dsgetdc:studi.srv`
+* **Vérifier son Contrôleur :** `nltest /dsgetdc:studi.srv` (Pour savoir quel DC a authentifié l'utilisateur).
 * **Vérifier ses Groupes :** `whoami /groups`
 * **Vider le Cache DNS :** `ipconfig /flushdns`
 * **Lâcher / Demander une IP :** `ipconfig /release` puis `ipconfig /renew`
 * **Forcer MAJ des GPOs :** `gpupdate /force /boot`
-* **Bilan des GPOs actives :** `gpresult /r` (ou `/h Bilan.html`)
-* **Réparer Domaine cassé :** `Test-ComputerSecureChannel -Repair -Credential (Get-Credential)`
+* **Bilan des GPOs actives :** `gpresult /r` (ou `gpresult /h Bilan.html` pour un rapport web détaillé).
+* **Réparer Domaine cassé :** `Test-ComputerSecureChannel -Repair -Credential (Get-Credential)` (Répare l'erreur "La relation d'approbation a échoué" sans avoir à sortir et rentrer le PC du domaine !).
