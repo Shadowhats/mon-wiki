@@ -2,7 +2,7 @@
 
 Ce document traduit l'intégralité de mon référentiel Cisco CCNA vers l'environnement HPE Comware (Switchs 5130, 5940, etc.).
 
-!!! tip "Les 5 Règles d'Or de Comware"
+"Les 5 Règles d'Or de Comware"
     * Le `show` devient **`display`**.
     * Le `no` devient **`undo`**.
     * Le `configure terminal` devient **`system-view`**.
