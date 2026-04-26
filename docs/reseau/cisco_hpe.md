@@ -101,7 +101,7 @@ Ce document traduit l'intégralité de mon référentiel Cisco CCNA vers l'envir
 ⚠️ "Note sur EIGRP"
     Le protocole EIGRP (`router eigrp`) est 100% propriétaire Cisco.
     
-    Dans un environnement mixte ou HP, on le remplace obligatoirement par **OSPF**.
+   Dans un environnement mixte ou HP, on le remplace obligatoirement par OSPF.
 
 | Action (Cisco) | Commande Cisco IOS | Équivalent HPE Comware |
 | :--- | :--- | :--- |
