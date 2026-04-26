@@ -2,10 +2,18 @@
 
 Ce document traduit l'intégralité de mon référentiel Cisco CCNA vers l'environnement HPE Comware (Switchs 5130, 5940, etc.).
 
-> **⚠️ Règle d'or Comware :** > * Le `show` devient `display`.
-> * Le `no` devient `undo`.
-> * La configuration globale `configure terminal` devient `system-view`.
-> * On peut utiliser `display` depuis n'importe quel mode (pas besoin de `do show`).
+>"Les 5 Règles d'Or de Comware"
+
+  > Le `show` devient `display`.
+    
+  > Le `no` devient `undo`.
+    
+  > Le `configure terminal` devient `system-view`.
+    
+  > Le "Cheat Code" absolu : taper `display this` dans n'importe quel sous-menu (interface, vlan...) affiche sa configuration spécifique.
+    
+  > On peut utiliser `display` depuis n'importe quel mode (pas besoin de rajouter `do` comme chez Cisco).
+    
 
 ---
 
@@ -13,7 +21,7 @@ Ce document traduit l'intégralité de mon référentiel Cisco CCNA vers l'envir
 
 | Action (Cisco) | Commande Cisco IOS | Équivalent HPE Comware |
 | :--- | :--- | :--- |
-| **Passer en mode privilège** | `enable` | *(Inutile, déjà actif)* |
+| **Passer en mode privilège** | `enable` | *(Inutile, souvent déjà actif)* |
 | **Mode configuration** | `configure terminal` | `system-view` |
 | **Reculer / Sortir** | `exit` / `end` | `quit` / `return` |
 | **Nommer l'équipement** | `hostname [nom]` | `sysname [nom]` |
@@ -29,7 +37,7 @@ Ce document traduit l'intégralité de mon référentiel Cisco CCNA vers l'envir
 
 | Action (Cisco) | Commande Cisco IOS | Équivalent HPE Comware |
 | :--- | :--- | :--- |
-| **Sauvegarder la config** | `copy run start` ou `write` | `save` ou `save foce` (Rapide/Scripts) |
+| **Sauvegarder la config** | `copy run start` ou `write` | `save` ou `save force` (Rapide/Scripts) |
 | **Effacer la sauvegarde** | `erase startup-config` | `reset saved-configuration` |
 | **Lister les fichiers** | `dir` / `show file systems` | `dir` |
 | **Supprimer un fichier** | `delete [nom]` | `delete [nom]` |
@@ -55,7 +63,11 @@ Ce document traduit l'intégralité de mon référentiel Cisco CCNA vers l'envir
 
 ## 🔀 4. Switching (VLAN, Trunk, LACP, MAC)
 
-> **⚠️ Note sur VTP :** VTP (VLAN Trunking Protocol) est propriétaire Cisco. Sur HP, on utilise le standard **MVRP** (`mvrp global enable`).
+⚠️ "Attention à la syntaxe et aux protocoles"
+  
+  VTP est propriétaire Cisco. Sur HP, on utilise le standard MVRP (`mvrp global enable`).
+   
+  Séparateur : Contrairement à Cisco qui utilise des virgules pour lister des VLANs, Comware utilise des **espaces** (ex: `10 20 30`).
 
 | Action (Cisco) | Commande Cisco IOS | Équivalent HPE Comware |
 | :--- | :--- | :--- |
@@ -63,7 +75,7 @@ Ce document traduit l'intégralité de mon référentiel Cisco CCNA vers l'envir
 | **Port en Accès** | `switchport mode access` | `port link-type access` |
 | **Assigner le VLAN** | `switchport access vlan [id]`| `port access vlan [id]` |
 | **Port en Trunk** | `switchport mode trunk` | `port link-type trunk` |
-| **Filtrer VLANs sur Trunk**| `switchport trunk allowed vlan`| `port trunk permit vlan [ids]` |
+| **Filtrer VLANs sur Trunk**| `switchport trunk allowed vlan`| `port trunk permit vlan 10 20 30` |
 | **Changer le VLAN natif** | `switchport trunk native vlan` | `port trunk pvid vlan [id]` |
 | **Agrégation (LACP)** | `channel-group [id] mode active` | `port link-aggregation group [id]` |
 | **Fixer une adresse MAC** | `mac address-table static` | `mac-address static [mac] port [int] vlan [id]` |
@@ -86,7 +98,10 @@ Ce document traduit l'intégralité de mon référentiel Cisco CCNA vers l'envir
 
 ## 🗺️ 6. Routage (Niveaux 3, OSPF, NAT)
 
-> **⚠️ Note sur EIGRP :** Le protocole EIGRP (`router eigrp`) est 100% propriétaire Cisco. Dans un environnement mixte ou HP, on le remplace obligatoirement par **OSPF**.
+⚠️ "Note sur EIGRP"
+    Le protocole EIGRP (`router eigrp`) est 100% propriétaire Cisco.
+    
+   Dans un environnement mixte ou HP, on le remplace obligatoirement par OSPF.
 
 | Action (Cisco) | Commande Cisco IOS | Équivalent HPE Comware |
 | :--- | :--- | :--- |
@@ -117,12 +132,13 @@ Ce document traduit l'intégralité de mon référentiel Cisco CCNA vers l'envir
 
 ## 🩺 8. Diagnostics (Les commandes qui sauvent la vie)
 
-| Ce que tu veux voir | Commande Cisco IOS (`show...`) | Équivalent HPE Comware (`display...`) |
+| Ce que tu veux voir | Commande Cisco IOS | Équivalent HPE Comware (`display`) |
 | :--- | :--- | :--- |
 | **La config en cours** | `show running-config` | `display current-configuration` |
+| **La config d'un port** | `show run interface [int]` | **`display this`** *(En mode interface)* |
 | **La config sauvegardée** | `show startup-config` | `display saved-configuration` |
 | **Les IP et l'état des ports**| `show ip interface brief` | `display ip interface brief` |
-| **Détails physiques / Câble**| `show interfaces` / `show controllers`| `display interface` / `display counters` |
+| **Détails physiques / Câble**| `show interfaces` | `display interface` / `display counters` |
 | **Les VLANs actifs** | `show vlan brief` | `display vlan all` |
 | **La table MAC (Switch)** | `show mac address-table` | `display mac-address` |
 | **La table ARP (IP <=> MAC)**| `show ip arp` | `display arp` |
