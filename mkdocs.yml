@@ -19,6 +19,7 @@ nav:
 
   - 🌐 Réseau:
       - 🎓 Masterclass Fondamentaux (CCNA): reseau/notions_reseau.md
+      - 🚪 Ports & Protocoles Indispensables: reseau/ports_reseau.md
       - ⚡ Commandes Cisco vs HPE: reseau/cisco_hpe.md
       - 🛡️ Stormshield Network Security: reseau/stormshield.md
       - 🧰 Troubleshooting Réseau: reseau/troubleshooting.md

@@ -29,6 +29,8 @@ Comprendre l'écosystème, les obligations légales et les outils du marché pou
 ### 🌐 Ingénierie Réseau
 Déploiement, configuration et dépannage des équipements de commutation et de routage.
 
+* **[Ports & Protocoles (Cheat Sheet)](reseau/ports_reseau.md) :** Liste exhaustive des ports standards (TCP/UDP) et commandes de diagnostic (netstat, ss, nmap).
+
 * **[Cheat Sheet Cisco vs HPE](reseau/cisco_hpe.md) :** Traduction intégrale des commandes Cisco IOS vers l'environnement HPE Comware.
 
 * **[Stormshield Network Security](reseau/stormshield.md) :** Administration CLI du firewall leader français (Objets, Filtrage, VPN).
