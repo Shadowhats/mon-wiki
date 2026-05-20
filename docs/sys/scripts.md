@@ -50,11 +50,16 @@ Bonnes pratiques :
 ---
 
 ## 🧰 0.2 Prérequis PowerShell pour Active Directory
-### Autoriser l'exécution des scripts (Execution Policy)
-# Par défaut, Windows bloque les scripts. À exécuter une fois en mode Administrateur :
-Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
 
-Sur un poste d’administration, il faut installer les outils RSAT.
+### Autoriser l'exécution des scripts (Execution Policy)
+
+Par défaut, Windows bloque les scripts. À exécuter une fois en mode Administrateur :
+
+```powershell
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+```
+
+Sur un poste d’administration, il faut également installer les outils RSAT.
 
 ### Vérifier si le module Active Directory est disponible
 
@@ -335,8 +340,10 @@ Alex,Bernard,abernard,P@ssw0rd123!,"OU=IT,OU=Utilisateurs,DC=studi,DC=srv",IT,Te
 ---
 
 ## 👥 2.2 Création massive d’utilisateurs depuis CSV
-⚠️ "Sécurité des mots de passe"
+
+!!! warning "Sécurité des mots de passe"
     Ce script lit les mots de passe en clair depuis un CSV. **Supprimez impérativement le fichier CSV** de votre serveur une fois le script terminé pour éviter une faille critique.
+
 ```powershell
 Import-Module ActiveDirectory
 

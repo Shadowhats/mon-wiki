@@ -2,18 +2,12 @@
 
 Ce document traduit l'intégralité de mon référentiel Cisco CCNA vers l'environnement HPE Comware (Switchs 5130, 5940, etc.).
 
->"Les 5 Règles d'Or de Comware"
-
-  > Le `show` devient `display`.
-    
-  > Le `no` devient `undo`.
-    
-  > Le `configure terminal` devient `system-view`.
-    
-  > Le "Cheat Code" absolu : taper `display this` dans n'importe quel sous-menu (interface, vlan...) affiche sa configuration spécifique.
-    
-  > On peut utiliser `display` depuis n'importe quel mode (pas besoin de rajouter `do` comme chez Cisco).
-    
+!!! tip "Les 5 Règles d'Or de Comware"
+    1. Le `show` devient `display`.
+    2. Le `no` devient `undo`.
+    3. Le `configure terminal` devient `system-view`.
+    4. **Cheat code absolu** : taper `display this` dans n'importe quel sous-menu (interface, vlan…) affiche sa configuration spécifique.
+    5. On peut utiliser `display` depuis n'importe quel mode (pas besoin de rajouter `do` comme chez Cisco).
 
 ---
 
@@ -63,11 +57,9 @@ Ce document traduit l'intégralité de mon référentiel Cisco CCNA vers l'envir
 
 ## 🔀 4. Switching (VLAN, Trunk, LACP, MAC)
 
-⚠️ "Attention à la syntaxe et aux protocoles"
-  
-  VTP est propriétaire Cisco. Sur HP, on utilise le standard MVRP (`mvrp global enable`).
-   
-  Séparateur : Contrairement à Cisco qui utilise des virgules pour lister des VLANs, Comware utilise des **espaces** (ex: `10 20 30`).
+!!! warning "Attention à la syntaxe et aux protocoles"
+    - **VTP est propriétaire Cisco.** Sur HP, on utilise le standard **MVRP** (`mvrp global enable`).
+    - **Séparateur** : contrairement à Cisco qui utilise des virgules pour lister des VLANs, Comware utilise des **espaces** (ex : `10 20 30`).
 
 | Action (Cisco) | Commande Cisco IOS | Équivalent HPE Comware |
 | :--- | :--- | :--- |
@@ -98,10 +90,8 @@ Ce document traduit l'intégralité de mon référentiel Cisco CCNA vers l'envir
 
 ## 🗺️ 6. Routage (Niveaux 3, OSPF, NAT)
 
-⚠️ "Note sur EIGRP"
-    Le protocole EIGRP (`router eigrp`) est 100% propriétaire Cisco.
-    
-   Dans un environnement mixte ou HP, on le remplace obligatoirement par OSPF.
+!!! info "Note sur EIGRP"
+    Le protocole **EIGRP** (`router eigrp`) est 100 % propriétaire Cisco. Dans un environnement mixte ou HP, on le remplace obligatoirement par **OSPF**.
 
 | Action (Cisco) | Commande Cisco IOS | Équivalent HPE Comware |
 | :--- | :--- | :--- |

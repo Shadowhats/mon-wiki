@@ -2,14 +2,13 @@
 
 Un réseau ne "tombe pas en marche". Quand un utilisateur crie *"Internet est cassé !"*, voici la méthodologie et l'arsenal de commandes pour isoler et réparer la panne.
 
-> **💡 La Méthodologie en Or (Modèle OSI) :**
+!!! tip "La Méthodologie en Or (modèle OSI)"
+    Ne commence jamais par chercher un problème de pare-feu si le câble est débranché ! Remonte toujours du bas vers le haut :
 
-> Ne commence jamais par chercher un problème de pare-feu si le câble est débranché ! Remonte toujours du bas vers le haut :
->
-> 1. **Couche 1 (Physique) :** Le câble est-il branché ? Le port du switch clignote-t-il ?
-> 2. **Couche 2 (Liaison) :** Y a-t-il un problème d'adresse MAC ou de VLAN ?
-> 3. **Couche 3 (Réseau) :** Le PC a-t-il une IP valide ? La passerelle répond-elle au Ping ?
-> 4. **Couches 4 à 7 (Ports & App) :** Le DNS fonctionne-t-il ? Le port TCP est-il ouvert ?
+    1. **Couche 1 (Physique)** : le câble est-il branché ? Le port du switch clignote-t-il ?
+    2. **Couche 2 (Liaison)** : y a-t-il un problème d'adresse MAC ou de VLAN ?
+    3. **Couche 3 (Réseau)** : le PC a-t-il une IP valide ? La passerelle répond-elle au ping ?
+    4. **Couches 4 à 7 (Ports & App)** : le DNS fonctionne-t-il ? Le port TCP est-il ouvert ?
 
 ---
 

@@ -39,8 +39,9 @@ Il existe 65 535 ports. Les ports de 0 à 1023 sont dits "bien connus" (Well-Kno
 
 | Port | Protocole | Type | Description |
 | :--- | :--- | :--- | :--- |
-| **25** | **SMTP** | TCP | Envoi d'emails entre serveurs (non chiffré). |
-| **587 / 465**| **SMTPS** | TCP | Envoi d'emails sécurisé (le port 587 est le standard moderne avec STARTTLS). |
+| **25** | **SMTP** | TCP | Envoi d'emails entre serveurs (non chiffré, MTA→MTA). |
+| **465** | **SMTPS** | TCP | Soumission de mail avec **TLS implicite** (RFC 8314). Le client se connecte déjà en TLS. |
+| **587** | **Submission** | TCP | Soumission de mail client → serveur, généralement avec **STARTTLS**. Standard moderne pour les clients (Thunderbird, Outlook). |
 | **110** | **POP3** | TCP | Réception d'emails (télécharge le mail et le supprime du serveur). |
 | **995** | **POP3S** | TCP | Réception d'emails POP3 sécurisée (SSL/TLS). |
 | **143** | **IMAP** | TCP | Réception d'emails (synchronise avec le serveur, idéal pour multi-appareils). |

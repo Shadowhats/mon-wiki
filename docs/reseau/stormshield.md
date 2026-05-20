@@ -48,7 +48,8 @@ Ces commandes permettent de gérer la "boîte" physique ou virtuelle.
 
 ## 🧱 4. Manipulation des Objets (La base du filtrage)
 
-> **⚠️ Différence V3 / V4 :** En V4, les objets réseaux ont été fusionnés. Un objet peut désormais porter une IPv4 ET une IPv6 en même temps.
+!!! info "Évolution des objets en SNS V4 et V5"
+    Depuis la **V4**, les objets réseaux ont été fusionnés : un objet peut désormais porter une **IPv4 et une IPv6** en même temps. La V5 conserve ce comportement.
 
 | Action | Commande Officielle | Explication & Paramètres |
 | :--- | :--- | :--- |

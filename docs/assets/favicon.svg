@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect x="6" y="6" width="52" height="52" rx="10" fill="#9fef00"/>
+  <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle"
+        font-family="ui-monospace, 'Fira Code', monospace" font-size="40" font-weight="900" fill="#0b0e14">S</text>
+</svg>

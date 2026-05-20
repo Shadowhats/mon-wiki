@@ -2,7 +2,8 @@
 
 L'audit de sécurité offensive consiste à tester la robustesse d'un Système d'Information en utilisant les mêmes techniques qu'un attaquant. Ce document recense les outils de référence, leur utilité et les commandes essentielles pour auditer un parc informatique.
 
-> **⚠️ AVERTISSEMENT LÉGAL :** > L'utilisation de ces outils est strictement réservée à un cadre pédagogique ou professionnel avec une **autorisation écrite (mandat d'audit)**. Scanner un réseau qui ne vous appartient pas est puni par la loi (Code Pénal, articles 323-1 à 323-7).
+!!! danger "Avertissement légal"
+    L'utilisation de ces outils est strictement réservée à un cadre pédagogique ou professionnel avec une **autorisation écrite (mandat d'audit)**. Scanner un réseau qui ne vous appartient pas est puni par la loi (Code pénal, **articles 323-1 à 323-7**).
 
 ---
 

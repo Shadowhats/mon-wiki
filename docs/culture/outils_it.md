@@ -88,7 +88,8 @@ Ce document cartographie l'écosystème complet des logiciels et solutions utili
 | **Tenable Nessus** | 🔴 Prop | | Le scanner de vulnérabilités pro de référence absolue dans l'industrie. |
 | **Nmap** | 🟢 OS | | Le couteau suisse du scan de ports réseau. |
 | **BloodHound** | 🟢 OS | | Outil redoutable qui cartographie visuellement les chemins d'attaque dans un Active Directory. |
-| **Metasploit / Cobalt Strike**| 🟡/🔴 | | Les frameworks des hackers éthiques pour exploiter les failles. |
+| **Metasploit** | 🟡 Free / 🔴 Pro | | Framework d'exploitation. Version Community gratuite, Pro payante. |
+| **Cobalt Strike** | 🔴 Prop | | Framework C2 commercial très puissant. Massivement utilisé par les Red Teams… **et par les attaquants** (versions piratées). |
 
 ---
 

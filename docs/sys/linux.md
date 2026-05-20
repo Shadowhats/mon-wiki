@@ -44,7 +44,7 @@ Ce mémo est le référentiel absolu pour l'administration système sous Linux. 
 | :--- | :--- | :--- |
 | **Devenir root** | `sudo su -` | Le `-` charge les variables d'environnement de root. |
 | **Créer un user complet** | `useradd -m -s` | `useradd -m -s /bin/bash j.doe` (Crée dossier `/home` et assigne le shell bash). |
-| **Bloquer un compte (Mdp)** | `passwd -l` | `passwd -l j.doe` (Lock le compte). `-u` pour débloquer. |
+| **Bloquer un compte (Mdp)** | `passwd -l` | `passwd -l j.doe` verrouille le **mot de passe** (pas le compte entier — la connexion par clé SSH reste possible). Pour bloquer totalement : `usermod -L j.doe` ou `chage -E 0 j.doe`. `-u` pour débloquer. |
 | **Expiration du Mdp** | `chage -l` | `chage -l j.doe` (Voir/Modifier quand son mot de passe expire). |
 | **Éditer les droits sudo** | `visudo` | Ouvre le fichier `/etc/sudoers` de façon sécurisée (ne jamais l'éditer avec nano direct !). |
 | **Changer Proprio/Groupe** | `chown -R` | `chown -R www-data:www-data /var/www/` |

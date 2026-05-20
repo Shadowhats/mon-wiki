@@ -79,3 +79,75 @@ services:
 
 volumes:
   db_data: # Déclaration du volume persistant
+```
+
+### 🛠️ Commandes Docker Compose essentielles
+
+| Action | Commande | Explication |
+| :--- | :--- | :--- |
+| **Démarrer la stack** | `docker compose up -d` | Lance tous les services en arrière-plan. |
+| **Arrêter la stack** | `docker compose down` | Stoppe et supprime les conteneurs (les volumes persistent). |
+| **Tout supprimer** | `docker compose down -v` | ⚠️ Supprime aussi les volumes (données perdues). |
+| **Voir les logs** | `docker compose logs -f` | Suit les logs de tous les services en direct. |
+| **Logs d'un service** | `docker compose logs -f wordpress` | Suit uniquement le service WordPress. |
+| **Redémarrer un service** | `docker compose restart wordpress` | Redémarre un seul service sans toucher aux autres. |
+| **Mettre à jour les images** | `docker compose pull && docker compose up -d` | Récupère les dernières images et recrée les conteneurs. |
+| **État de la stack** | `docker compose ps` | Liste les conteneurs de la stack avec leur statut. |
+
+---
+
+## 📦 4. LXC : conteneurs Linux "système" (Proxmox)
+
+Contrairement à Docker qui isole une **application**, **LXC** isole un **système Linux complet** (init, services, plusieurs processus). C'est l'approche par défaut sur **Proxmox VE** pour les conteneurs.
+
+### 🆚 LXC vs Docker
+
+| Critère | LXC | Docker |
+| :--- | :--- | :--- |
+| Philosophie | Conteneur "système" (OS complet) | Conteneur "application" (1 process) |
+| Init | systemd / sysvinit | aucun (PID 1 = l'app) |
+| Persistance | Stockage propre, persistant | Éphémère + volumes |
+| Cas d'usage typique | Petit serveur léger (Nginx, BDD, jeux) | Microservices, CI/CD, dev local |
+| Sur Proxmox | Natif (CT) | Possible mais peu courant |
+
+### 🛠️ Commandes LXC (Proxmox CLI)
+
+| Action | Commande | Explication |
+| :--- | :--- | :--- |
+| **Lister les CT** | `pct list` | Affiche tous les conteneurs LXC du nœud. |
+| **Créer un CT** | `pct create 101 local:vztmpl/debian-12-standard_*.tar.zst --hostname web01 --memory 512 --net0 name=eth0,bridge=vmbr0,ip=dhcp` | Crée un CT Debian 12 avec 512 Mo de RAM et IP DHCP. |
+| **Démarrer / Arrêter** | `pct start 101` / `pct stop 101` | Cycle de vie du CT. |
+| **Entrer dedans** | `pct enter 101` | Ouvre un shell root à l'intérieur. |
+| **Snapshot** | `pct snapshot 101 avant-maj` | Sauvegarde instantanée avant changement. |
+| **Restaurer** | `pct rollback 101 avant-maj` | Revient au snapshot. |
+| **Supprimer** | `pct destroy 101` | ⚠️ Détruit le CT et ses données. |
+
+!!! tip "Astuce Proxmox"
+    Les **templates LXC** se téléchargent depuis l'interface web Proxmox : `Datacenter → node → local → CT Templates`. Choisis toujours la version `standard` pour avoir un système minimal.
+
+---
+
+## 🧠 5. Quand choisir quoi ?
+
+| Besoin | Solution recommandée |
+| :--- | :--- |
+| Faire tourner un OS différent (Windows sur Linux) | **VM (Hyper-V / Proxmox / ESXi)** |
+| Isoler un service critique avec son propre kernel | **VM** |
+| Déployer une appli web moderne (Nginx + PHP + DB) | **Docker Compose** |
+| Stack microservices en production | **Kubernetes** (hors scope ici) |
+| Petit serveur Linux léger sur Proxmox | **LXC (CT)** |
+| Reproduire un environnement de dev sur son PC | **Docker** ou **VM type 2** |
+| Lab CCNA / pentest | **VM (VirtualBox / GNS3 / EVE-NG)** |
+
+---
+
+## 🩺 6. Troubleshooting virtualisation
+
+| Symptôme | Cause probable |
+| :--- | :--- |
+| VM lente alors que CPU OK | I/O disque saturée, Thin Provisioning sur disque lent, snapshot trop ancien |
+| Conteneur Docker qui meurt en boucle | Mauvaise commande au boot, dépendance absente (ex : DB pas prête → `depends_on` + healthcheck) |
+| `Permission denied` sur volume Docker | Problème UID/GID entre l'hôte et le conteneur (`chown -R 1000:1000 /chemin`) |
+| `Cannot start service: driver failed programming external connectivity` | Port déjà utilisé sur l'hôte (vérifier `ss -tulpn`) |
+| LXC qui ne démarre pas après MAJ Proxmox | Kernel incompatible avec le template — recréer ou migrer le CT |
+| Snapshot qui grossit sans fin sur VM | Snapshot oublié depuis des semaines — à fusionner via `Checkpoint-VM` ou GUI |

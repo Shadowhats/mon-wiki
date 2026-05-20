@@ -2,11 +2,10 @@
 
 L'Active Directory est le cœur du système d'information. Quand il dysfonctionne, c'est toute l'entreprise qui s'arrête. Voici les méthodologies et commandes pour résoudre les pannes les plus courantes.
 
-> **💡 Les 3 Règles d'Or de l'AD :**
-
-> 1. **C'est toujours la faute du DNS :** L'AD repose à 100% sur le DNS. Si le DNS plante, l'AD meurt.
-> 2. **Le Ticket Kerberos :** Si tu ajoutes un utilisateur à un groupe, il n'aura ses droits que **lorsqu'il aura fermé et rouvert sa session Windows** (pour générer un nouveau ticket). Inutile de faire des `gpupdate` en boucle !
-> 3. **Patience (La Réplication) :** Si tu crées un utilisateur sur le Serveur A, il faut parfois 15 minutes pour qu'il apparaisse sur le Serveur B (sur un autre site). 
+!!! tip "Les 3 Règles d'Or de l'AD"
+    1. **C'est toujours la faute du DNS** : l'AD repose à 100 % sur le DNS. Si le DNS plante, l'AD meurt.
+    2. **Le ticket Kerberos** : si tu ajoutes un utilisateur à un groupe, il n'aura ses droits que **lorsqu'il aura fermé et rouvert sa session Windows** (pour générer un nouveau ticket). Inutile de faire des `gpupdate` en boucle !
+    3. **Patience (la réplication)** : si tu crées un utilisateur sur le Serveur A, il faut parfois 15 minutes pour qu'il apparaisse sur le Serveur B (sur un autre site).
 
 
 

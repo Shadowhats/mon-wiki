@@ -6,8 +6,10 @@
 
 Bienvenue sur mon espace de documentation personnel. Ce wiki a été pensé et conçu comme un véritable "Second Cerveau". Il centralise l'ensemble de mes notes, procédures, scripts et référentiels techniques accumulés lors de ma formation TSSR et de mes expériences professionnelles en entreprise.
 
-L'objectif de ce site est simple : **Ne plus jamais chercher deux fois la même information.** > **💡 Astuce de navigation :**
-> Utilisez la **barre de recherche** en haut de l'écran pour trouver instantanément une commande, un outil ou une procédure parmi toutes les pages du wiki.
+L'objectif de ce site est simple : **Ne plus jamais chercher deux fois la même information.**
+
+!!! tip "Astuce de navigation"
+    Utilisez la **barre de recherche** en haut de l'écran pour trouver instantanément une commande, un outil ou une procédure parmi toutes les pages du wiki.
 
 ---
 

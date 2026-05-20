@@ -1,31 +1,188 @@
-site_name: Mon Memo IT
-site_description: Documentation technique, Cheat Sheets et Labs
-site_author: Shad
+# =============================================================
+#  ShadowHats Wiki — Configuration MkDocs Material
+#  https://wiki.shadowhats.fr
+# =============================================================
 
+site_name: ShadowHats // Wiki
+site_description: Base de connaissances technique — Administration Système, Réseau & Cybersécurité.
+site_author: Shad
+site_url: https://wiki.shadowhats.fr
+
+# --- Dépôt & édition ----------------------------------------
+repo_url: https://github.com/Shadowhats/mon-wiki
+repo_name: Shadowhats/mon-wiki
+edit_uri: edit/main/docs/
+
+copyright: >
+  &copy; 2026 <a href="https://shadowhats.fr" target="_blank" rel="noopener">ShadowHats</a> —
+  Base de connaissances technique.
+
+# --- Thème Material ------------------------------------------
 theme:
   name: material
-  palette:
-    # Mode sombre activé par défaut
-    scheme: slate 
-    primary: custom
-    accent: cyan
+  language: fr
 
+  # Logo & favicon (SVG embarqué dans docs/assets/)
+  logo: assets/logo.svg
+  favicon: assets/favicon.svg
+
+  # Polices web (chargées via Google Fonts par Material, ou self-host plus tard)
+  font:
+    text: Inter
+    code: Fira Code
+
+  # Palette double : auto / clair / sombre, avec toggles
+  palette:
+    - media: "(prefers-color-scheme)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-auto
+        name: Basculer en mode clair
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-7
+        name: Basculer en mode sombre
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-4
+        name: Basculer en mode auto
+
+  # Fonctionnalités UX
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top
+    - navigation.footer
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.tracking
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - content.tooltips
+    - content.action.edit
+
+  icon:
+    repo: fontawesome/brands/github
+    edit: material/pencil
+    view: material/eye
+    admonition:
+      note: material/note-edit
+      tip: material/lightbulb-on
+      info: material/information
+      warning: material/alert
+      danger: material/skull-crossbones
+      example: material/test-tube
+      quote: material/format-quote-close
+
+# --- Extensions Markdown -------------------------------------
+markdown_extensions:
+  # Standard
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: "🔗"
+      permalink_title: Lien direct
+      toc_depth: 3
+
+  # PyMdownx (livré avec mkdocs-material)
+  - pymdownx.betterem
+  - pymdownx.caret
+  - pymdownx.mark
+  - pymdownx.tilde
+  - pymdownx.keys
+  - pymdownx.smartsymbols
+  - pymdownx.magiclink:
+      repo_url_shorthand: true
+      user: Shadowhats
+      repo: mon-wiki
+  - pymdownx.details
+  - pymdownx.snippets:
+      check_paths: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+      clickable_checkbox: false
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+      auto_title: false
+  - pymdownx.inlinehilite
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+# --- Plugins -------------------------------------------------
+plugins:
+  - search:
+      lang: fr
+      separator: '[\s\-,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
+
+# --- CSS & JS supplémentaires --------------------------------
+extra_css:
+  - stylesheets/custom.css
+
+extra_javascript:
+  - javascripts/extra.js
+
+# --- Variables de pied de page & social ---------------------
+extra:
+  generator: false
+  social:
+    - icon: fontawesome/solid/globe
+      link: https://shadowhats.fr
+      name: shadowhats.fr
+    - icon: fontawesome/brands/github
+      link: https://github.com/Shadowhats
+      name: GitHub Shadowhats
+  status:
+    new: Page récemment ajoutée
+    deprecated: Contenu à mettre à jour
+
+# --- Navigation ---------------------------------------------
 nav:
   - 🏠 Accueil: index.md
-  
-  - 📚 Culture Générale IT:
-      - Panorama des Solutions (Stack IT): culture/outils_it.md
+
+  - 📚 Culture IT:
+      - Panorama des solutions (Stack IT): culture/outils_it.md
       - NIS2 & Hygiène ANSSI: culture/nis2_anssi.md
 
   - 🌐 Réseau:
       - 🎓 Masterclass Fondamentaux (CCNA): reseau/notions_reseau.md
-      - 🚪 Ports & Protocoles Indispensables: reseau/ports_reseau.md
+      - 🚪 Ports & Protocoles indispensables: reseau/ports_reseau.md
       - ⚡ Commandes Cisco vs HPE: reseau/cisco_hpe.md
       - 🛡️ Stormshield Network Security: reseau/stormshield.md
-      - 🧰 Troubleshooting Réseau: reseau/troubleshooting.md
+      - 🧰 Troubleshooting réseau: reseau/troubleshooting.md
 
   - 🛡️ Cybersécurité:
-      - 🕵️‍♂️ Audit & Sécurité Offensive: culture/audit_securite.md
+      - 🕵️ Audit & Sécurité offensive: culture/audit_securite.md
 
   - 🐧 Système:
       - 🪟 Active Directory & Windows Server: sys/ad_windows.md
@@ -34,8 +191,5 @@ nav:
       - 🐳 Virtualisation & Docker: sys/virtualisation.md
       - 📜 Scripts & Automatisation: sys/scripts.md
 
-  - 🤝 Soft Skills & Organisation:
+  - 🤝 Soft Skills:
       - 📋 Procédures & Modèles: sys/soft_skills.md
-
-extra_css:
-  - stylesheets/custom.css

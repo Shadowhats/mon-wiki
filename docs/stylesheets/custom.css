@@ -1,9 +1,780 @@
-/* Casse la limite de largeur du thème par défaut */
-.md-grid {
-  max-width: 95vw; /* Utilise 95% de la largeur de l'écran */
+/* =============================================================
+   ShadowHats Wiki — Thème inspiré de shadowhats.fr
+   Palette HTB (#9fef00 / #0b0e14), Fira Code, Inter.
+   ============================================================= */
+
+/* -------------------------------------------------------------
+   1. Variables globales
+   ------------------------------------------------------------- */
+:root {
+    /* Palette ShadowHats / HTB */
+    --shadow-green:        #9fef00;
+    --shadow-green-soft:   #b8ff33;
+    --shadow-green-dark:   #7ac400;
+    --shadow-green-glow:   rgba(159, 239, 0, 0.35);
+
+    --shadow-bg:           #0b0e14;
+    --shadow-bg-2:         #11151d;
+    --shadow-panel:        rgba(30, 41, 59, 0.65);
+    --shadow-panel-solid:  #1e293b;
+    --shadow-border:       rgba(255, 255, 255, 0.08);
+
+    --shadow-text:         #f8fafc;
+    --shadow-text-muted:   #94a3b8;
+    --shadow-text-dim:     #64748b;
+
+    --shadow-indigo:       #818cf8;
+    --shadow-orange:       #fb923c;
+    --shadow-red:          #ef4444;
+    --shadow-yellow:       #fbbf24;
+
+    /* Polices */
+    --shadow-font-mono: 'Fira Code', 'JetBrains Mono', ui-monospace, monospace;
 }
 
-/* (Optionnel) Donne un peu plus d'espace au menu de gauche */
-.md-sidebar--primary {
-  width: 15rem; 
+/* -------------------------------------------------------------
+   2. Override des variables Material (palette primaire custom)
+   ------------------------------------------------------------- */
+[data-md-color-scheme="slate"][data-md-color-primary="custom"],
+[data-md-color-scheme="default"][data-md-color-primary="custom"] {
+    --md-primary-fg-color:        var(--shadow-green);
+    --md-primary-fg-color--light: var(--shadow-green-soft);
+    --md-primary-fg-color--dark:  var(--shadow-green-dark);
+    --md-primary-bg-color:        #000000;
+    --md-primary-bg-color--light: rgba(0, 0, 0, 0.7);
+}
+
+[data-md-color-scheme="slate"][data-md-color-accent="custom"],
+[data-md-color-scheme="default"][data-md-color-accent="custom"] {
+    --md-accent-fg-color:         var(--shadow-indigo);
+    --md-accent-fg-color--transparent: rgba(129, 140, 248, 0.1);
+    --md-accent-bg-color:         #ffffff;
+}
+
+/* -------------------------------------------------------------
+   3. Mode sombre (slate) — identité ShadowHats forte
+   ------------------------------------------------------------- */
+[data-md-color-scheme="slate"] {
+    --md-default-bg-color:        var(--shadow-bg);
+    --md-default-bg-color--light: var(--shadow-bg-2);
+    --md-default-bg-color--lighter: rgba(30, 41, 59, 0.4);
+    --md-default-bg-color--lightest: rgba(30, 41, 59, 0.2);
+
+    --md-default-fg-color:         var(--shadow-text);
+    --md-default-fg-color--light:  #cbd5e1;
+    --md-default-fg-color--lighter: var(--shadow-text-muted);
+    --md-default-fg-color--lightest: var(--shadow-text-dim);
+
+    --md-typeset-a-color:          var(--shadow-green);
+    --md-typeset-mark-color:       var(--shadow-green-glow);
+
+    --md-code-bg-color:            rgba(15, 23, 42, 0.85);
+    --md-code-fg-color:            #e2e8f0;
+    --md-code-hl-color:            var(--shadow-green-glow);
+    --md-code-hl-comment-color:    var(--shadow-text-dim);
+    --md-code-hl-keyword-color:    var(--shadow-green);
+    --md-code-hl-string-color:     var(--shadow-orange);
+    --md-code-hl-number-color:     var(--shadow-indigo);
+    --md-code-hl-name-color:       #cbd5e1;
+    --md-code-hl-special-color:    var(--shadow-indigo);
+    --md-code-hl-function-color:   var(--shadow-yellow);
+    --md-code-hl-operator-color:   var(--shadow-text-muted);
+    --md-code-hl-punctuation-color: var(--shadow-text-muted);
+
+    --md-footer-bg-color:          #050709;
+    --md-footer-bg-color--dark:    #000000;
+
+    background-color: var(--shadow-bg);
+    background-image: radial-gradient(circle at 2px 2px, rgba(30, 41, 59, 0.5) 1px, transparent 0);
+    background-size: 40px 40px;
+    background-attachment: fixed;
+}
+
+[data-md-color-scheme="slate"] body { background: transparent; }
+
+/* -------------------------------------------------------------
+   4. Typographie : Inter + Fira Code
+   ------------------------------------------------------------- */
+body, .md-typeset {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+code, kbd, pre, .md-typeset code, .md-typeset pre {
+    font-family: var(--shadow-font-mono);
+    font-variant-ligatures: contextual;
+}
+
+/* Titres : accent vert + tracking serré sur le h1 */
+.md-typeset h1 {
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    color: var(--md-default-fg-color);
+    border-bottom: 2px solid var(--shadow-green);
+    padding-bottom: 0.4rem;
+    margin-bottom: 1.2rem;
+}
+.md-typeset h2 {
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin-top: 2rem;
+    color: var(--md-default-fg-color);
+}
+.md-typeset h2::before {
+    content: "// ";
+    color: var(--shadow-green);
+    font-family: var(--shadow-font-mono);
+    font-weight: 700;
+    opacity: 0.7;
+}
+.md-typeset h3 {
+    font-weight: 700;
+    color: var(--shadow-green-soft);
+}
+[data-md-color-scheme="default"] .md-typeset h3 { color: var(--shadow-green-dark); }
+
+.md-typeset h4, .md-typeset h5, .md-typeset h6 { font-weight: 700; }
+
+/* Liens hover avec sous-ligne animée */
+.md-typeset a {
+    text-decoration: none;
+    border-bottom: 1px dotted transparent;
+    transition: color 0.2s, border-color 0.2s;
+}
+.md-typeset a:hover {
+    color: var(--shadow-green-soft);
+    border-bottom-color: var(--shadow-green);
+}
+
+/* -------------------------------------------------------------
+   5. Header (barre en haut)
+   ------------------------------------------------------------- */
+.md-header {
+    background-color: rgba(11, 14, 20, 0.9);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--shadow-border);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+[data-md-color-scheme="default"] .md-header {
+    background-color: rgba(255, 255, 255, 0.92);
+    border-bottom-color: rgba(0, 0, 0, 0.08);
+}
+
+.md-header__title {
+    font-family: var(--shadow-font-mono);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    font-size: 0.95rem;
+}
+
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+    width: 1.6rem;
+    height: 1.6rem;
+    filter: drop-shadow(0 0 6px var(--shadow-green-glow));
+}
+
+/* Recherche cyber-style */
+.md-search__form {
+    background-color: rgba(30, 41, 59, 0.6);
+    border: 1px solid var(--shadow-border);
+    border-radius: 0.3rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.md-search__form:hover,
+[data-md-toggle="search"]:checked ~ .md-header .md-search__form {
+    border-color: var(--shadow-green);
+    box-shadow: 0 0 0 2px var(--shadow-green-glow);
+}
+.md-search__input {
+    font-family: var(--shadow-font-mono);
+}
+.md-search__input::placeholder {
+    color: var(--shadow-text-dim);
+    font-family: var(--shadow-font-mono);
+    font-size: 0.85em;
+    text-transform: lowercase;
+}
+
+/* -------------------------------------------------------------
+   6. Tabs de navigation (top tabs)
+   ------------------------------------------------------------- */
+.md-tabs {
+    background-color: rgba(11, 14, 20, 0.85);
+    border-bottom: 1px solid var(--shadow-border);
+}
+[data-md-color-scheme="default"] .md-tabs {
+    background-color: rgba(255, 255, 255, 0.85);
+}
+
+.md-tabs__link {
+    font-family: var(--shadow-font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.7;
+    transition: opacity 0.2s, color 0.2s;
+}
+.md-tabs__link:hover,
+.md-tabs__link--active {
+    opacity: 1;
+    color: var(--shadow-green);
+}
+
+/* -------------------------------------------------------------
+   7. Sidebar (nav latérale)
+   ------------------------------------------------------------- */
+.md-nav__title {
+    font-family: var(--shadow-font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--shadow-green) !important;
+}
+
+.md-nav__link {
+    transition: color 0.15s, transform 0.15s;
+}
+.md-nav__link:hover {
+    color: var(--shadow-green) !important;
+    transform: translateX(2px);
+}
+.md-nav__link--active {
+    color: var(--shadow-green) !important;
+    font-weight: 600;
+}
+
+/* TOC à droite : marqueur vert */
+.md-nav--secondary .md-nav__link--active {
+    border-left: 2px solid var(--shadow-green);
+    padding-left: 0.5rem;
+    margin-left: -0.5rem;
+}
+
+/* -------------------------------------------------------------
+   8. Contenu : layout
+   ------------------------------------------------------------- */
+.md-grid { max-width: 80rem; }
+
+.md-content {
+    padding-bottom: 4rem;
+}
+
+.md-content__inner {
+    margin-top: 1rem;
+}
+
+/* Bouton "Edit on GitHub" */
+.md-content__button {
+    color: var(--shadow-green);
+    opacity: 0.7;
+    transition: opacity 0.2s, transform 0.2s;
+}
+.md-content__button:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+/* -------------------------------------------------------------
+   9. Admonitions (admonition / pymdownx.details)
+   ------------------------------------------------------------- */
+.md-typeset .admonition,
+.md-typeset details {
+    border-radius: 0.4rem;
+    border-left: 4px solid var(--shadow-green);
+    background-color: var(--shadow-panel);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    font-size: 0.78rem;
+}
+[data-md-color-scheme="default"] .md-typeset .admonition,
+[data-md-color-scheme="default"] .md-typeset details {
+    background-color: rgba(0, 0, 0, 0.03);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.md-typeset .admonition-title,
+.md-typeset summary {
+    font-family: var(--shadow-font-mono);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.72rem;
+    background-color: rgba(159, 239, 0, 0.08);
+}
+
+/* Variantes par type */
+.md-typeset .admonition.tip,
+.md-typeset .admonition.hint,
+.md-typeset details.tip,
+.md-typeset details.hint {
+    border-left-color: var(--shadow-green);
+}
+.md-typeset .tip > .admonition-title,
+.md-typeset .hint > .admonition-title,
+.md-typeset .tip > summary,
+.md-typeset .hint > summary { background-color: rgba(159, 239, 0, 0.12); }
+
+.md-typeset .admonition.warning,
+.md-typeset details.warning,
+.md-typeset .admonition.caution,
+.md-typeset details.caution {
+    border-left-color: var(--shadow-orange);
+}
+.md-typeset .warning > .admonition-title,
+.md-typeset .caution > .admonition-title,
+.md-typeset .warning > summary,
+.md-typeset .caution > summary { background-color: rgba(251, 146, 60, 0.12); }
+
+.md-typeset .admonition.danger,
+.md-typeset .admonition.error,
+.md-typeset details.danger,
+.md-typeset details.error {
+    border-left-color: var(--shadow-red);
+    box-shadow: 0 2px 14px rgba(239, 68, 68, 0.18);
+}
+.md-typeset .danger > .admonition-title,
+.md-typeset .error > .admonition-title,
+.md-typeset .danger > summary,
+.md-typeset .error > summary { background-color: rgba(239, 68, 68, 0.15); }
+
+.md-typeset .admonition.info,
+.md-typeset .admonition.note,
+.md-typeset details.info,
+.md-typeset details.note {
+    border-left-color: var(--shadow-indigo);
+}
+.md-typeset .info > .admonition-title,
+.md-typeset .note > .admonition-title,
+.md-typeset .info > summary,
+.md-typeset .note > summary { background-color: rgba(129, 140, 248, 0.12); }
+
+.md-typeset .admonition.example,
+.md-typeset details.example {
+    border-left-color: var(--shadow-yellow);
+}
+.md-typeset .example > .admonition-title,
+.md-typeset .example > summary { background-color: rgba(251, 191, 36, 0.12); }
+
+/* -------------------------------------------------------------
+   10. Code blocks
+   ------------------------------------------------------------- */
+.md-typeset code {
+    font-size: 0.85em;
+    padding: 0.15em 0.4em;
+    border-radius: 0.25em;
+    background-color: rgba(15, 23, 42, 0.7);
+    color: var(--shadow-green-soft);
+    border: 1px solid var(--shadow-border);
+}
+[data-md-color-scheme="default"] .md-typeset code {
+    background-color: rgba(0, 0, 0, 0.06);
+    color: var(--shadow-green-dark);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.md-typeset pre > code {
+    border: none;
+    background: transparent;
+    color: var(--md-code-fg-color);
+    padding: 0;
+}
+
+.md-typeset pre {
+    border-radius: 0.4rem;
+    border: 1px solid var(--shadow-border);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    overflow-x: auto;
+}
+
+/* Bouton "copy" du code block */
+.md-clipboard {
+    color: var(--shadow-text-dim);
+    transition: color 0.2s;
+}
+.md-clipboard:hover {
+    color: var(--shadow-green) !important;
+}
+
+/* Highlight ligne courante */
+.md-typeset .highlight .hll {
+    background-color: var(--shadow-green-glow);
+}
+
+/* -------------------------------------------------------------
+   11. Tables — scannables + responsive horizontale
+   ------------------------------------------------------------- */
+.md-typeset table:not([class]) {
+    background-color: rgba(15, 23, 42, 0.4);
+    border: 1px solid var(--shadow-border);
+    border-radius: 0.4rem;
+    overflow: hidden;
+    font-size: 0.78rem;
+}
+[data-md-color-scheme="default"] .md-typeset table:not([class]) {
+    background-color: rgba(255, 255, 255, 0.6);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.md-typeset table:not([class]) th {
+    background-color: rgba(159, 239, 0, 0.08);
+    color: var(--shadow-green-soft);
+    font-family: var(--shadow-font-mono);
+    font-weight: 700;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--shadow-green);
+}
+[data-md-color-scheme="default"] .md-typeset table:not([class]) th {
+    color: var(--shadow-green-dark);
+}
+
+.md-typeset table:not([class]) tr:hover {
+    background-color: rgba(159, 239, 0, 0.04);
+    transition: background-color 0.15s;
+}
+
+/* Wrapper scrollable horizontalement sur mobile */
+.md-typeset__scrollwrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+.md-typeset__table {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* -------------------------------------------------------------
+   12. Blockquotes
+   ------------------------------------------------------------- */
+.md-typeset blockquote {
+    border-left: 3px solid var(--shadow-indigo);
+    color: var(--md-default-fg-color--light);
+    background-color: rgba(129, 140, 248, 0.06);
+    padding: 0.6rem 1rem;
+    border-radius: 0 0.3rem 0.3rem 0;
+    font-style: italic;
+}
+
+/* -------------------------------------------------------------
+   13. Boutons (md-button)
+   ------------------------------------------------------------- */
+.md-typeset .md-button {
+    background-color: transparent;
+    color: var(--shadow-green);
+    border: 1px solid var(--shadow-green);
+    font-family: var(--shadow-font-mono);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.75rem;
+    padding: 0.55em 1.1em;
+    border-radius: 0.25em;
+    transition: all 0.25s ease;
+}
+.md-typeset .md-button:hover,
+.md-typeset .md-button:focus {
+    background-color: var(--shadow-green);
+    color: #000;
+    box-shadow: 0 0 18px var(--shadow-green-glow);
+    transform: translateY(-1px);
+}
+.md-typeset .md-button--primary {
+    background-color: var(--shadow-green);
+    color: #000;
+}
+.md-typeset .md-button--primary:hover {
+    filter: brightness(1.1);
+}
+
+/* -------------------------------------------------------------
+   14. Footer
+   ------------------------------------------------------------- */
+.md-footer {
+    background: linear-gradient(180deg, #050709 0%, #000000 100%);
+    border-top: 1px solid var(--shadow-border);
+}
+.md-footer-meta {
+    background-color: transparent;
+    border-top: 1px solid var(--shadow-border);
+}
+.md-footer__title {
+    font-family: var(--shadow-font-mono);
+}
+.md-copyright {
+    color: var(--shadow-text-muted);
+    font-size: 0.75rem;
+    font-family: var(--shadow-font-mono);
+}
+.md-copyright a {
+    color: var(--shadow-green);
+    text-decoration: none;
+}
+.md-social__link:hover {
+    color: var(--shadow-green) !important;
+}
+
+/* -------------------------------------------------------------
+   15. Scrollbar custom
+   ------------------------------------------------------------- */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+::-webkit-scrollbar-track {
+    background: var(--shadow-bg);
+}
+::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 5px;
+    border: 2px solid var(--shadow-bg);
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--shadow-green);
+}
+* {
+    scrollbar-color: #334155 var(--shadow-bg);
+    scrollbar-width: thin;
+}
+
+/* -------------------------------------------------------------
+   16. Listes — petits puces accent
+   ------------------------------------------------------------- */
+.md-typeset ul li::marker {
+    color: var(--shadow-green);
+}
+.md-typeset ol li::marker {
+    color: var(--shadow-green);
+    font-family: var(--shadow-font-mono);
+    font-weight: 700;
+}
+
+/* Task lists (checklists) */
+.md-typeset .task-list-item .task-list-control {
+    color: var(--shadow-green);
+}
+.md-typeset .task-list-indicator::before {
+    background-color: var(--shadow-panel-solid);
+    border: 1px solid var(--shadow-border);
+}
+.md-typeset [type="checkbox"]:checked + .task-list-indicator::before {
+    background-color: var(--shadow-green);
+}
+
+/* -------------------------------------------------------------
+   17. Onglets (pymdownx.tabbed) — style cyber
+   ------------------------------------------------------------- */
+.md-typeset .tabbed-set > input:checked + label {
+    color: var(--shadow-green);
+    border-bottom-color: var(--shadow-green);
+}
+.md-typeset .tabbed-labels > label {
+    font-family: var(--shadow-font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+/* -------------------------------------------------------------
+   18. Tags (badges status)
+   ------------------------------------------------------------- */
+.md-tag {
+    background-color: rgba(159, 239, 0, 0.1);
+    color: var(--shadow-green);
+    border: 1px solid var(--shadow-green);
+    font-family: var(--shadow-font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.7rem;
+}
+
+/* -------------------------------------------------------------
+   19. RESPONSIVE — Mobile-first tweaks
+   ------------------------------------------------------------- */
+
+/* Tablette : densifier un peu */
+@media screen and (max-width: 1024px) {
+    .md-typeset h1 { font-size: 1.8rem; }
+    .md-typeset h2 { font-size: 1.4rem; }
+    .md-typeset h3 { font-size: 1.1rem; }
+}
+
+/* Mobile : taille de police adaptée, tap targets, tables */
+@media screen and (max-width: 768px) {
+    .md-typeset {
+        font-size: 0.85rem;
+        line-height: 1.65;
+    }
+
+    .md-typeset h1 {
+        font-size: 1.55rem;
+        line-height: 1.2;
+    }
+    .md-typeset h2 {
+        font-size: 1.25rem;
+        margin-top: 1.4rem;
+    }
+    .md-typeset h3 { font-size: 1.05rem; }
+
+    /* Header plus compact */
+    .md-header__title { font-size: 0.85rem; }
+
+    /* Content padding réduit */
+    .md-content__inner {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+
+    /* Tap targets : nav items plus grands */
+    .md-nav__link {
+        padding: 0.5rem 0;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+    }
+
+    /* Tables scrollables horizontalement */
+    .md-typeset table:not([class]) {
+        font-size: 0.72rem;
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+    .md-typeset table:not([class]) td,
+    .md-typeset table:not([class]) th {
+        white-space: normal;
+        min-width: 8rem;
+    }
+
+    /* Code blocks : permettre scroll horizontal sans casser le layout */
+    .md-typeset pre {
+        font-size: 0.78rem;
+    }
+    .md-typeset pre > code {
+        white-space: pre;
+        overflow-x: auto;
+    }
+
+    /* Inline code plus lisible */
+    .md-typeset code {
+        font-size: 0.82em;
+        word-break: break-word;
+    }
+
+    /* Admonitions plus compactes */
+    .md-typeset .admonition,
+    .md-typeset details {
+        margin: 1rem -0.5rem;
+        border-radius: 0;
+        border-left-width: 3px;
+    }
+
+    /* Boutons : touch target */
+    .md-typeset .md-button {
+        padding: 0.7em 1.2em;
+        font-size: 0.7rem;
+        min-height: 44px;
+    }
+
+    /* Footer plus compact */
+    .md-footer-meta__inner {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
+/* Très petits écrans (≤480 px) */
+@media screen and (max-width: 480px) {
+    .md-typeset h1 { font-size: 1.35rem; }
+    .md-typeset h2 { font-size: 1.15rem; }
+
+    /* TOC à droite : masqué (déjà géré par Material) */
+    .md-sidebar--secondary { display: none; }
+
+    /* Logo plus petit */
+    .md-header__button.md-logo img,
+    .md-header__button.md-logo svg {
+        width: 1.4rem;
+        height: 1.4rem;
+    }
+}
+
+/* -------------------------------------------------------------
+   20. Animations subtiles
+   ------------------------------------------------------------- */
+@keyframes shadow-fade-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.md-typeset .admonition,
+.md-typeset details,
+.md-typeset pre,
+.md-typeset table:not([class]) {
+    animation: shadow-fade-in 0.35s ease-out;
+}
+
+/* Réduit les animations si l'utilisateur le préfère */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        transition-duration: 0.001ms !important;
+    }
+}
+
+/* -------------------------------------------------------------
+   21. Petits détails finaux
+   ------------------------------------------------------------- */
+
+/* Permalink "🔗" sur les headings : visible au hover seulement */
+.md-typeset .headerlink {
+    opacity: 0;
+    transition: opacity 0.2s;
+    margin-left: 0.4em;
+    font-size: 0.7em;
+}
+.md-typeset h1:hover .headerlink,
+.md-typeset h2:hover .headerlink,
+.md-typeset h3:hover .headerlink,
+.md-typeset h4:hover .headerlink {
+    opacity: 0.7;
+}
+.md-typeset .headerlink:hover {
+    opacity: 1 !important;
+    color: var(--shadow-green);
+}
+
+/* Marqueur ==texte== (pymdownx.mark) */
+.md-typeset mark {
+    background-color: var(--shadow-green-glow);
+    color: inherit;
+    padding: 0.05em 0.3em;
+    border-radius: 0.2em;
+}
+
+/* Touches clavier (pymdownx.keys) */
+.md-typeset kbd {
+    background-color: var(--shadow-panel-solid);
+    color: var(--shadow-green-soft);
+    border: 1px solid var(--shadow-border);
+    border-bottom-width: 2px;
+    border-radius: 0.25em;
+    padding: 0.1em 0.5em;
+    font-family: var(--shadow-font-mono);
+    font-size: 0.85em;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* Sélection de texte */
+::selection {
+    background-color: var(--shadow-green);
+    color: #000;
 }
